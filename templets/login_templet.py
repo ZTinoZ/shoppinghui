@@ -17,5 +17,3 @@ print(type(res_param))
 print((json.dumps(res_param))["code"])
 print(type(json.dumps(res_param)))
 
-
-
