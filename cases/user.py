@@ -23,6 +23,7 @@ def app_login(module_name='user'):
     r = requests.post(url=x[0], json=req_param, headers=base_headers)
     c = r.json()
     assert req_param['phone'] == c['info']['phone'], '登录接口错误！'
+    print(r.status_code)
 
 if __name__ == '__main__':
     app_login()
