@@ -1,7 +1,8 @@
 # encoding:utf-8
 
-import json, MySQLdb
-from configs.config import conn_db
+import json, MySQLdb, requests
+from configs.config import *
+from data.read_cases import *
 
 
 base_headers = {
@@ -38,3 +39,7 @@ def del_app_user(account, table='users'):
         print("用户%d删除成功！" %account)
     else:
         db[0].rollback()
+
+
+def get_token(module_name='user'):
+    pass
