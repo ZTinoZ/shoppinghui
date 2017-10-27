@@ -1,6 +1,8 @@
 # encoding:utf-8
 
 import xlrd, os, math
+
+
 # route = os.path.abspath('../data')
 
 
@@ -20,9 +22,10 @@ def read_xls2(tuple_name):
     for i in range(len(tuple_name)):
         num = int(math.floor(tuple_name[i][0]))
         api_name = tuple_name[i][1]
-        name = str(num) + '. ' + tuple_name[i][1] + '_' + tuple_name[i][2] + ': '
+        name = tuple_name[i][1] + '_' + tuple_name[i][2] + ': '
         url = tuple_name[i][3] + tuple_name[i][4]
         req_param = tuple_name[i][7]
         res_code = int(math.floor(tuple_name[i][8]))
         res_param = tuple_name[i][9]
-        yield num, api_name, name, url, req_param, res_code, res_param
+        yield num,          api_name,     name,         url,          req_param,    res_code,     res_param
+        #     param2[i][0], param2[i][1], param2[i][2], param2[i][3], param2[i][4], param2[i][5], param2[i][6]

@@ -5,7 +5,7 @@
 # for x in range():
 #     x
 
-import requests, json, unittest, xlrd
+import requests, json, unittest
 from data.read_cases import *
 from configs.common1 import *
 
@@ -21,6 +21,7 @@ class User(unittest.TestCase):
         # del_app_user('')
         pass
 
+    # APP用户注册
     def test_1_app_register(self, module_name='user'):
 
         # 获取验证码
@@ -49,6 +50,7 @@ class User(unittest.TestCase):
             else:
                 break
 
+    # APP用户登录
     def test_2_app_login(self, module_name='user'):
         x1 = read_xls1(module_name)
         param1 = tuple(x1)
@@ -60,9 +62,19 @@ class User(unittest.TestCase):
                 r = requests.post(url=param2[i][3], json=json_param, headers=base_headers)
                 c = r.json()
                 message = param2[i][2].encode('utf-8') + 'Failed!'
+                # 状态码和返回参数双重判断登录成功测试用例
                 self.assertEqual(param2[i][5], r.status_code, message)
+                if param2[i][2] == u'APP用户登录_登录成功:' and c.has_key(param2[i][4]):
+                    pass
+                else:
+                    raise message
+
             else:
                 break
 
+    # APP用户修改密码
+
+
 if __name__ == '__main__':
     unittest.main()
+

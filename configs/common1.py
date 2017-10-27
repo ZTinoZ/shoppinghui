@@ -15,6 +15,7 @@ base_headers = {
 }
 
 
+# 获取验证码
 def get_sms(account, table='sms'):
     db = conn_db(table)
     sql1 = "select comment from sms_log where account = "
@@ -27,6 +28,31 @@ def get_sms(account, table='sms'):
     return results
 
 
+# 获取修改密码签名
+def get_sign_code(account, product):
+    sha11 = get_sha1(account)
+    url1 = 'http://192.168.2.200/sms/forget'
+    req_param = {"sign": sha11, "password": "123abc", "product": product}
+    r1 = requests.post(url=url1, json=req_param)
+    sms = get_sms(account)
+    sha12 = get_sha1(sms)
+    url2 = 'http://192.168.2.200/sms/forget'
+    req_param = {"sign": sha12, "verification_code": sms, "phone": account}
+    r2 = requests.put(url=url1, json=req_param)
+    c = r2.json()
+    return c["sign_code"]
+
+
+# 删除验证码
+def del_sms(account, table='sms'):
+    db = conn_db(table)
+    sql1 = "delete from sms_log where account = "
+    sql = sql1 + account
+    db[1].execute(sql)
+    db[0].close()
+
+
+# 删除APP用户
 def del_app_user(account, table='users'):
     db = conn_db(table)
     sql1 = "delete from shop_user where phone = "
@@ -40,15 +66,22 @@ def del_app_user(account, table='users'):
         db[0].rollback()
 
 
-def get_sha1(phone):
-    data = 'phone=' + phone + '&' + 'salt=123456'
-    hash_sha1 = hashlib.sha1(data)
-    return hash_sha1.hexdigest()
+# 获取散列值
+def get_sha1(value):
+    data = 'phone=' + value + '&' + 'salt=123456'
+    sha1 = hashlib.sha1(data)
+    return sha1.hexdigest()
 
 
-def get_token():
+# 获取Bearer型令牌
+def get_token(phone):
     url = 'http://192.168.2.200/shop/user/login'
-    req_param = {"phone": "15100000000", "password": "123abc"}
-    r = requests.post(url=url, json=req_param, headers=base_headers)
+    req_param = {"phone": phone, "password": "123abc"}
+    r = requests.post(url=url, json=req_param)
     c = r.json()
-    return c['token']
+    token = 'Bearer ' + c['token']
+    return token
+
+if __name__ == '__main__':
+    a = get_token('15100000000')
+    print(a)
