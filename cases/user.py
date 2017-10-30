@@ -6,7 +6,7 @@
 #     x
 
 import requests, json, unittest
-from data.read_cases import read_xls1, read_xls2
+from data import read_cases
 from configs.common1 import *
 
 
