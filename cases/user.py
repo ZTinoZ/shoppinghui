@@ -22,6 +22,7 @@ class User(unittest.TestCase):
         pass
 
     # APP用户注册
+    @unittest.skip('ignored')
     def test_1_app_register(self, module_name='user'):
 
         # 获取验证码
@@ -61,14 +62,9 @@ class User(unittest.TestCase):
                 json_param = json.JSONDecoder().decode(param2[i][4])
                 r = requests.post(url=param2[i][3], json=json_param, headers=base_headers)
                 c = r.json()
+                print(param2[i][5])
                 message = param2[i][2].encode('utf-8') + 'Failed!'
-                # 状态码和返回参数双重判断登录成功测试用例
                 self.assertEqual(param2[i][5], r.status_code, message)
-                if param2[i][2] == u'APP用户登录_登录成功:' and c.has_key(param2[i][4]):
-                    pass
-                else:
-                    raise message
-
             else:
                 break
 
