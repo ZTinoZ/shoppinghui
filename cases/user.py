@@ -6,7 +6,7 @@
 #     x
 
 import requests, json, unittest
-from data.read_cases import *
+from data.read_cases import read_xls1, read_xls2
 from configs.common1 import *
 
 
@@ -62,11 +62,10 @@ class User(unittest.TestCase):
                 json_param = json.JSONDecoder().decode(param2[i][4])
                 r = requests.post(url=param2[i][3], json=json_param, headers=base_headers)
                 c = r.json()
-                print(param2[i][5])
                 message = param2[i][2].encode('utf-8') + 'Failed!'
                 self.assertEqual(param2[i][5], r.status_code, message)
             else:
-                break
+                continue
 
     # APP用户修改密码
 
