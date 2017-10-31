@@ -1,11 +1,11 @@
 # encoding:utf-8
 
 import xlrd, os, math
-route = os.path.abspath('../data')
+# route = os.path.abspath('../data')
 
 
 def read_xls1(module_name):
-    data = xlrd.open_workbook(route + '/cases_main.xls')
+    data = xlrd.open_workbook('../data/cases_main.xls')
     table = data.sheet_by_name(module_name)
     for i in range(1, 201):
         num = table.cell(i, 0).value
