@@ -1,7 +1,6 @@
 # encoding:utf-8
 
 import xlrd, os, math
-# route = os.path.abspath('../data')
 
 
 def read_xls1(module_name):
