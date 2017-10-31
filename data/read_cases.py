@@ -1,8 +1,6 @@
 # encoding:utf-8
 
 import xlrd, os, math
-
-
 # route = os.path.abspath('../data')
 
 
