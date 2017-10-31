@@ -9,10 +9,12 @@ from nose.tools import nottest, istest, assert_equal
 
 class TestUser:
 
-    def setup(self):
+    @classmethod
+    def setup_class(self):
         pass
 
-    def teardown(self):
+    @classmethod
+    def teardown_class(self):
         # data = xlrd.open_workbook(r'../data/cases.xls')
         # table = data.sheet_by_name(module_name='user')
         # num = table.cell(1, 7).value
@@ -21,15 +23,15 @@ class TestUser:
 
     # APP用户注册
     @nottest
-    def test_1_app_register(self, module_name='user'):
+    def test_1_app_register(self, module_name='user', phone='15000000000'):
 
         # 获取验证码
-        sign = get_sha1('15000000000')
-        json_param = {"sign": sign, "phone": "15000000000"}
+        sign = get_sha1(phone)
+        json_param = {"sign": sign, "phone": phone}
         url = 'http://192.168.2.200/sms/register'
         r = requests.post(url=url, json=json_param)
         if r.status_code == 200:
-            sms = get_sms('15000000000')
+            sms = get_sms(phone)
         elif r.status_code == 400:
             raise '该手机号当天发送短信已超过10条'
         else:
