@@ -62,8 +62,8 @@ class TestUser:
                 json_param = json.JSONDecoder().decode(param2[i][4])
                 r = requests.post(url=param2[i][3], json=json_param, headers=base_headers)
                 c = r.json()
-                message = param2[i][2].encode('utf-8') + 'Failed!'
-                assert_equal(param2[i][5], r.status_code, message)
+                code_msg = param2[i][2].encode('utf-8') + '用例失败（状态码不匹配）！'
+                assert_equal(param2[i][5], r.status_code, code_msg)
             else:
                 continue
 
