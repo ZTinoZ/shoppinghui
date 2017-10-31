@@ -60,8 +60,8 @@ def del_app_user(account, table='users'):
     db[1].execute(sql)
     db[0].commit()
     db[0].close()
-    if db[1].rowcount == 1:
-        print("用户 %d 删除成功！" % account)
+    if db[1].rowcount == 1:  # 判断是否删除成功，如果失败则回滚
+        print("用户 %s 删除成功！" % account)
     else:
         db[0].rollback()
 

@@ -15,14 +15,12 @@ class TestUser:
 
     @classmethod
     def teardown_class(self):
-        # data = xlrd.open_workbook(r'../data/cases.xls')
-        # table = data.sheet_by_name(module_name='user')
-        # num = table.cell(1, 7).value
-        # del_app_user('')
-        pass
+        try:
+            del_app_user('15000000000')
+        except:
+            raise
 
     # APP用户注册
-    @nottest
     def test_1_app_register(self, module_name='user', phone='15000000000'):
 
         # 获取验证码
@@ -46,8 +44,8 @@ class TestUser:
                 json_param = json.JSONDecoder().decode(param2[i][4])
                 json_param['verification_code'] = sms
                 r = requests.post(url=param2[i][3], json=json_param, headers=base_headers)
-                message = param2[i][2].encode('utf-8') + 'Failed!'
-                self.assertEqual(param2[i][5], r.status_code, message)
+                code_msg = param2[i][2].encode('utf-8') + '用例失败（状态码不匹配）！'
+                assert_equal(param2[i][5], r.status_code, code_msg)
             else:
                 break
 
