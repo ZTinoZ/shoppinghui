@@ -1,12 +1,9 @@
 # encoding:utf-8
 
-#
-# # 循环读取用例
-# for x in range():
-#     x
-
 import requests, json, unittest
-from data import read_cases
+import sys
+sys.path.append('..')
+from data.read_cases import *
 from configs.common1 import *
 
 
