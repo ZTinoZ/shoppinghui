@@ -63,6 +63,8 @@ class User(unittest.TestCase):
             else:
                 continue
 
+    # APP用户修改用户信息
+
     # APP用户修改密码
 
 
