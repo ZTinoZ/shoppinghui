@@ -1,7 +1,6 @@
 # encoding:utf-8
 
-import requests, json, unittest
-import sys
+import requests, json, unittest, sys
 sys.path.append('..')
 from data.read_cases import *
 from configs.common1 import *
