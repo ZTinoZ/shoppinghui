@@ -52,19 +52,19 @@ class TestUser:
     #             continue
     #
     # APP用户登录
-    def test_2_app_login(self):
-        x1 = read_xls1('user')
-        param1 = tuple(x1)
-        x2 = read_xls2(param1)
-        param2 = tuple(x2)
-        for i in range(len(param2)):
-            if param2[i][1] == u'APP用户登录' and param2[i][8] == 'available':
-                json_param = json.JSONDecoder().decode(param2[i][4])
-                r = requests.post(url=param2[i][3], json=json_param, headers=base_headers)
-                code_msg = param2[i][2].encode('utf-8') + '用例失败（状态码不匹配）！'
-                assert_equal(param2[i][5], r.status_code, code_msg)
-            else:
-                continue
+    # def test_2_app_login(self):
+    #     x1 = read_xls1('user')
+    #     param1 = tuple(x1)
+    #     x2 = read_xls2(param1)
+    #     param2 = tuple(x2)
+    #     for i in range(len(param2)):
+    #         if param2[i][1] == u'APP用户登录' and param2[i][8] == 'available':
+    #             json_param = json.JSONDecoder().decode(param2[i][4])
+    #             r = requests.post(url=param2[i][3], json=json_param, headers=base_headers)
+    #             code_msg = param2[i][2].encode('utf-8') + '用例失败（状态码不匹配）！'
+    #             assert_equal(param2[i][5], r.status_code, code_msg)
+    #         else:
+    #             continue
 
     # APP用户修改用户信息
     def test_3_app_mod_info(self):
