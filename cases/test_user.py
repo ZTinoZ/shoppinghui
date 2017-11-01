@@ -23,20 +23,7 @@ class TestUser:
 
     # APP用户注册
     def test_1_app_register(self):
-
-        # 获取验证码
-        sign = get_sha1(reg_phone)
-        json_param = {"sign": sign, "phone": reg_phone}
-        url = 'http://192.168.2.200/sms/register'
-        r = requests.post(url=url, json=json_param)
-        j = r.json()
-        if r.status_code == 200:
-            sms = get_sms(reg_phone)
-        elif r.status_code == 400:
-            raise Exception(j["message"])
-        else:
-            raise Exception('获取验证码失败！')
-
+        sms = get_sms(reg_phone)
         x1 = read_xls1('user')
         param1 = tuple(x1)
         x2 = read_xls2(param1)

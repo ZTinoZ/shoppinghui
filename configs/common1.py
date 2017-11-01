@@ -33,9 +33,25 @@ def correlation(corr, token):
         return base_headers
 
 
-# 获取验证码
-def get_sms(account, table='sms'):
-    db = conn_db(table)
+# 生成并获取验证码
+def get_sms(reg_phone):
+        sign = get_sha1(reg_phone)
+        json_param = {"sign": sign, "phone": reg_phone}
+        url = 'http://192.168.2.200/sms/register'
+        r = requests.post(url=url, json=json_param)
+        j = r.json()
+        if r.status_code == 200:
+            sms = get_db_sms(reg_phone)
+            return sms
+        elif r.status_code == 400:
+            raise Exception(j["message"])
+        else:
+            raise Exception('获取验证码失败！')
+
+
+# 从数据库获取验证码
+def get_db_sms(account):
+    db = conn_db('sms')
     sql1 = "select comment from sms_log where account = "
     sql2 = " order by created_at desc limit 1"
     sql = sql1 + account + sql2
@@ -61,7 +77,7 @@ def get_sign_code(account, product):
     return c["sign_code"]
 
 
-# 删除验证码
+# 从数据库删除验证码
 def del_sms(account, table='sms'):
     db = conn_db(table)
     sql1 = "delete from sms_log where account = "
@@ -71,7 +87,7 @@ def del_sms(account, table='sms'):
     db[0].close()
 
 
-# 删除APP用户
+# 从数据库删除APP用户
 def del_app_user(account, table='users'):
     db = conn_db(table)
     sql1 = "delete from shop_user where phone = "
