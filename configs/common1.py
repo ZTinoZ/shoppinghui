@@ -1,8 +1,11 @@
 # encoding:utf-8
 
-import json, MySQLdb, requests, hashlib
+import json, MySQLdb, requests, hashlib, logging
 from configs.config import *
-from data.read_cases import *
+
+
+reg_phone = '15000000000'  # 注册专用手机号
+login_phone = '15100000000'  # 登录专用手机号
 
 base_headers = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
@@ -13,6 +16,21 @@ base_headers = {
     "Upgrade-Insecure-Requests": "1",
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
 }
+
+
+# 获取需要带token的headers
+def correlation(corr, token):
+    if corr is not None:  # 判断是否有关联，如果没有则返回无关联的headers
+        if corr == 'need_token':
+            base_headers["Authorization"] = token
+            token_headers = base_headers
+            return token_headers
+        else:
+            base_headers["Authorization"] = corr
+            token_headers = base_headers
+            return token_headers
+    else:
+        return base_headers
 
 
 # 获取验证码
@@ -49,6 +67,7 @@ def del_sms(account, table='sms'):
     sql1 = "delete from sms_log where account = "
     sql = sql1 + account
     db[1].execute(sql)
+    db[0].commit()
     db[0].close()
 
 
@@ -61,19 +80,20 @@ def del_app_user(account, table='users'):
     db[0].commit()
     db[0].close()
     if db[1].rowcount == 1:  # 判断是否删除成功，如果失败则回滚
-        print("用户 %s 删除成功！" % account)
+        logging.info("用户 %s 删除成功！" % account)
     else:
         db[0].rollback()
+        logging.info("用户 %s 删除失败，回滚删除操作。" % account)
 
 
-# 获取散列值
+# 获取手机号加salt的散列值
 def get_sha1(value):
     data = 'phone=' + value + '&' + 'salt=123456'
     sha1 = hashlib.sha1(data)
     return sha1.hexdigest()
 
 
-# 获取Bearer型令牌
+# 获取Bearer型token
 def get_token(phone):
     url = 'http://192.168.2.200/shop/user/login'
     req_param = {"phone": phone, "password": "123abc"}
@@ -81,7 +101,3 @@ def get_token(phone):
     c = r.json()
     token = 'Bearer ' + c['token']
     return token
-
-if __name__ == '__main__':
-    a = get_token('15100000000')
-    print(a)
