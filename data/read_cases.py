@@ -4,8 +4,9 @@ import xlrd, os, math
 
 
 def read_xls1(module_name):
-    f = os.path.join('..', 'data', 'cases_main.xls')
-    data = xlrd.open_workbook(f)
+    #f = os.path.join('..', 'data', 'cases_main.xls')
+	file = '%s%s' % (os.path.abspath(os.path.dirname(os.path.dirname(__file__))), '/data/cases_main.xls')
+    data = xlrd.open_workbook(file)
     table = data.sheet_by_name(module_name)
     for i in range(1, 201):
         num = table.cell(i, 0).value
