@@ -36,5 +36,4 @@ class TestShop:
 
 
 if __name__ == '__main__':
-    a = TestShop()
-    a.test_1_app_order()
+    nose.main()

@@ -6,7 +6,7 @@ import xlrd, os, math, json
 cases_main = '%s%s' % (os.path.abspath(os.path.dirname(os.path.dirname(__file__))), '/data/cases_main.xls')
 cases_gpbs = '%s%s' % (os.path.abspath(os.path.dirname(os.path.dirname(__file__))), '/data/cases_gpbs.xls')
 cases_qiniu = '%s%s' % (os.path.abspath(os.path.dirname(os.path.dirname(__file__))), '/data/cases_qiniu.xls')
-long_param_path = '%s%s' % (os.path.abspath(os.path.dirname(os.path.dirname(__file__))), '/data/')
+param_path = '%s%s' % (os.path.abspath(os.path.dirname(os.path.dirname(__file__))), '/data/')
 
 
 def read_xls1(module_name):
@@ -37,7 +37,7 @@ def read_xls2(tuple_name):
 
 
 def read_param(excel_path):
-    path = '/'.join((long_param_path, excel_path))
+    path = '/'.join((param_path, excel_path))
     with open(path, 'r') as p:
         param = p.readlines()
     param = json.loads(''.join(param).strip('\n'))
