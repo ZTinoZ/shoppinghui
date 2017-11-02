@@ -21,7 +21,7 @@ class TestUser:
         except:
             raise
 
-    # APP用户注册
+    # APP用户注册（无token）
     def test_1_app_register(self):
         sms = get_sms(reg_phone)
         x1 = read_xls1('user')
@@ -38,7 +38,7 @@ class TestUser:
             else:
                 continue
 
-    # APP用户登录
+    # APP用户登录（无token）
     def test_2_app_login(self):
         x1 = read_xls1('user')
         param1 = tuple(x1)

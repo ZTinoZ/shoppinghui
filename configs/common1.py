@@ -6,6 +6,8 @@ from configs.config import *
 
 reg_phone = '15000000000'  # 注册专用手机号
 login_phone = '15100000000'  # 登录专用手机号
+sku_id = 'aabb7c86-bf9b-11e7-9271-000c2925c14e'  # 下单专用sku_id
+
 
 base_headers = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
@@ -19,14 +21,14 @@ base_headers = {
 
 
 # 获取需要带token的headers
-def correlation(corr, token):
-    if corr is not None:  # 判断是否有关联，如果没有则返回无关联的headers
-        if corr == 'need_token':
+def correlation(c, token):
+    if c is not None:  # 判断是否有关联，如果没有则返回无关联的headers
+        if c == 'need_token':
             base_headers["Authorization"] = token
             token_headers = base_headers
             return token_headers
         else:
-            base_headers["Authorization"] = corr
+            base_headers["Authorization"] = c
             token_headers = base_headers
             return token_headers
     else:
@@ -35,26 +37,61 @@ def correlation(corr, token):
 
 # 生成并获取验证码
 def get_sms(reg_phone):
-        sign = get_sha1(reg_phone)
-        json_param = {"sign": sign, "phone": reg_phone}
-        url = 'http://192.168.2.200/sms/register'
-        r = requests.post(url=url, json=json_param)
-        j = r.json()
-        if r.status_code == 200:
-            sms = get_db_sms(reg_phone)
-            return sms
-        elif r.status_code == 400:
-            raise Exception(j["message"])
-        else:
-            raise Exception('获取验证码失败！')
+    sign = get_sha1(reg_phone)
+    json_param = {"sign": sign, "phone": reg_phone}
+    url = 'http://192.168.2.200/sms/register'
+    r = requests.post(url=url, json=json_param)
+    j = r.json()
+    if r.status_code == 200:
+        sms = get_db_sms(reg_phone)
+        return sms
+    elif r.status_code == 400:
+        raise Exception(j["message"])
+    else:
+        raise Exception('获取验证码失败！')
 
 
 # 从数据库获取验证码
 def get_db_sms(account):
     db = conn_db('sms')
-    sql1 = "select comment from sms_log where account = "
+    sql1 = "select comment from sms.sms_log where account = "
     sql2 = " order by created_at desc limit 1"
     sql = sql1 + account + sql2
+    db[1].execute(sql)
+    results = db[1].fetchone()
+    results = results[0]
+    db[0].close()
+    return results
+
+
+# 添加商品至购物车并获取购物车id
+def get_shopcart_id():
+    url = 'http://192.168.2.200/shop/shopcart'
+    req_param = {
+        "sku_id": sku_id,
+        "company_id": "3d75251a-6df2-11e7-a420-000c2925c14e",
+        "count": 1,
+        "sale_price": 0.01,
+        "bonus": 0,
+        "points": 0,
+        "warehouse_ids": ["8e09b82f-bf96-11e7-9271-000c2925c14e"]
+    }
+    base_headers["Authorization"] = get_token(login_phone)
+    headers = base_headers
+    r = requests.post(url=url, json=req_param, headers=headers)
+    if r.status_code == 200:
+        shopcart_id = get_db_shopcart_id(sku_id)
+        return shopcart_id
+    else:
+        raise Exception()
+
+
+# 从数据库获取购物车id
+def get_db_shopcart_id(sku_id):
+    db = conn_db('sms')
+    sql1 = "select id from shop.shop_user_cart where sku_id = "
+    sql2 = " order by created_at desc limit 1"
+    sql = sql1 + "'" + sku_id + "'" + sql2
     db[1].execute(sql)
     results = db[1].fetchone()
     results = results[0]
@@ -90,7 +127,7 @@ def del_sms(account, table='sms'):
 # 从数据库删除APP用户
 def del_app_user(account, table='users'):
     db = conn_db(table)
-    sql1 = "delete from shop_user where phone = "
+    sql1 = "delete from users.shop_user where phone = "
     sql = sql1 + account
     db[1].execute(sql)
     db[0].commit()
@@ -117,3 +154,6 @@ def get_token(phone):
     c = r.json()
     token = 'Bearer ' + c['token']
     return token
+
+# if __name__ == '__main__':
+#     get_shopcart_id()

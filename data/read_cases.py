@@ -1,11 +1,16 @@
 # encoding:utf-8
 
-import xlrd, os, math
+import xlrd, os, math, json
+
+
+cases_main = '%s%s' % (os.path.abspath(os.path.dirname(os.path.dirname(__file__))), '/data/cases_main.xls')
+cases_gpbs = '%s%s' % (os.path.abspath(os.path.dirname(os.path.dirname(__file__))), '/data/cases_gpbs.xls')
+cases_qiniu = '%s%s' % (os.path.abspath(os.path.dirname(os.path.dirname(__file__))), '/data/cases_qiniu.xls')
+long_param_path = '%s%s' % (os.path.abspath(os.path.dirname(os.path.dirname(__file__))), '/data/')
 
 
 def read_xls1(module_name):
-    f = '%s%s' % (os.path.abspath(os.path.dirname(os.path.dirname(__file__))), '/data/cases_main.xls')
-    data = xlrd.open_workbook(f)
+    data = xlrd.open_workbook(cases_main)
     table = data.sheet_by_name(module_name)
     for i in range(1, 201):
         num = table.cell(i, 0).value
@@ -30,3 +35,10 @@ def read_xls2(tuple_name):
         yield num,          api_name,     name,         url,          req_param,    res_code,     res_param,    correlation,  condition
         #     param2[i][0], param2[i][1], param2[i][2], param2[i][3], param2[i][4], param2[i][5], param2[i][6], param2[i][7], param2[i][8]
 
+
+def read_param(excel_path):
+    path = '/'.join((long_param_path, excel_path))
+    with open(path, 'r') as p:
+        param = p.readlines()
+    param = json.loads(''.join(param).strip('\n'))
+    return param
