@@ -1,0 +1,17 @@
+{
+  "address_id": "86b5215c-bf97-11e7-9271-000c2925c14e",
+  "warehouse_ids": ["8e09b82f-bf96-11e7-9271-000c2925c14e"],
+  "company_id": "3d75251a-6df2-11e7-a420-000c2925c14e",
+  "company_express": "1",
+  "total_amount": "1.01",
+  "order_amount": "0.01",
+  "count": "1",
+  "platform_type": "9e304d4e8df1b74cfa009913198428ab",
+  "shopcart": [
+    {
+      "id": "",
+      "sku_id": "aabb7c86-bf9b-11e7-9271-000c2925c14e",
+      "count": "1"
+    }
+  ]
+}
