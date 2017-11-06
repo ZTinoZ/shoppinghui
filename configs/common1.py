@@ -156,5 +156,11 @@ def get_token(phone):
     token = 'Bearer ' + c['token']
     return token
 
+
+def get_token_json(token):
+    base_headers["Authorization"] = token
+    headers = base_headers
+    return headers
+
 # if __name__ == '__main__':
 #     get_shopcart_id()

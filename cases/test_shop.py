@@ -11,13 +11,14 @@ class TestShop:
 
     @classmethod
     def setup_class(cls):
-        headers = get_token(login_phone)
-        requests.delete(url='http://192.168.2.200/shop/shopcart', headers=headers)
+        global headers
+        token = get_token(login_phone)
+        headers = get_token_json(token)
+        requests.delete(url='http://192.168.2.200/shop/shopcart', headers=headers)  # 清空购物车
 
     @classmethod
     def teardown_class(cls):
-        headers = get_token(login_phone)
-        requests.delete(url='http://192.168.2.200/shop/shopcart', headers=headers)
+        requests.delete(url='http://192.168.2.200/shop/shopcart', headers=headers)  # 清空购物车
 
     # APP用户下单
     def test_1_app_order(self):
