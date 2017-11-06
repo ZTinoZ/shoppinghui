@@ -10,7 +10,7 @@
   "platform_type": "9e304d4e8df1b74cfa009913198428ab",
   "shopcart": [
     {
-      "id": "",
+      "id": "XXX",
       "sku_id": "aabb7c86-bf9b-11e7-9271-000c2925c14e",
       "count": "1"
     }

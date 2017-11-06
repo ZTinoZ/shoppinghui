@@ -5,7 +5,8 @@ from configs.config import *
 
 
 reg_phone = '15000000000'  # 注册专用手机号
-login_phone = '15100000000'  # 登录专用手机号
+login_phone = '15100000000'  # 登录专用手机号（已认证）
+login_phone_unauth = '15200000000'  # 登录专用手机号（未认证）
 sku_id = 'aabb7c86-bf9b-11e7-9271-000c2925c14e'  # 下单专用sku_id
 
 
@@ -83,7 +84,7 @@ def get_shopcart_id():
         shopcart_id = get_db_shopcart_id(sku_id)
         return shopcart_id
     else:
-        raise Exception()
+        raise Exception(r.status_code)
 
 
 # 从数据库获取购物车id
