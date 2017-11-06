@@ -11,11 +11,13 @@ class TestShop:
 
     @classmethod
     def setup_class(cls):
-        pass
+        headers = get_token(login_phone)
+        requests.delete(url='http://192.168.2.200/shop/shopcart', headers=headers)
 
     @classmethod
     def teardown_class(cls):
-        pass
+        headers = get_token(login_phone)
+        requests.delete(url='http://192.168.2.200/shop/shopcart', headers=headers)
 
     # APP用户下单
     def test_1_app_order(self):
