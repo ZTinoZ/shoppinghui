@@ -33,7 +33,8 @@ class TestUser:
                 json_param = json.JSONDecoder().decode(param2[i][4])
                 json_param['verification_code'] = sms
                 r = requests.post(url=param2[i][3], json=json_param, headers=base_headers)
-                code_msg = param2[i][2].encode('utf-8') + '用例失败（状态码不匹配）！'
+                j = r.json()
+                code_msg = (param2[i][2] + j['message']).encode('utf-8')
                 assert_equal(param2[i][5], r.status_code, code_msg)
             else:
                 continue
