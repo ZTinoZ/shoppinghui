@@ -4,10 +4,10 @@ import json, MySQLdb, requests, hashlib, logging
 from configs.config import *
 
 
-reg_phone = '15000000000'  # 注册专用手机号
-login_phone = '15100000000'  # 登录专用手机号（已认证）
-login_phone_unauth = '15200000000'  # 登录专用手机号（未认证）
-sku_id = 'aabb7c86-bf9b-11e7-9271-000c2925c14e'  # 下单专用sku_id
+REG_PHONE = '15000000000'  # 注册专用手机号
+LOGIN_PHONE = '15100000000'  # 登录专用手机号（已认证）
+LOGIN_PHONE_UNAUTH = '15200000000'  # 登录专用手机号（未认证）
+SKU = 'aabb7c86-bf9b-11e7-9271-000c2925c14e'  # 下单专用sku
 
 
 base_headers = {
@@ -19,21 +19,6 @@ base_headers = {
     "Upgrade-Insecure-Requests": "1",
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
 }
-
-
-# 获取需要带token的headers
-def correlation(c, token):
-    if c is not None:  # 判断是否有关联，如果没有则返回无关联的headers
-        if c == 'need_token':
-            base_headers["Authorization"] = token
-            token_headers = base_headers
-            return token_headers
-        else:
-            base_headers["Authorization"] = c
-            token_headers = base_headers
-            return token_headers
-    else:
-        return base_headers
 
 
 # 生成并获取验证码
@@ -69,7 +54,7 @@ def get_db_sms(account):
 def get_shopcart_id():
     url = 'http://192.168.2.200/shop/shopcart'
     req_param = {
-        "sku_id": sku_id,
+        "sku_id": SKU,
         "company_id": "3d75251a-6df2-11e7-a420-000c2925c14e",
         "count": 1,
         "sale_price": 0.01,
@@ -77,11 +62,11 @@ def get_shopcart_id():
         "points": 0,
         "warehouse_ids": ["8e09b82f-bf96-11e7-9271-000c2925c14e"]
     }
-    base_headers["Authorization"] = get_token(login_phone)
+    base_headers["Authorization"] = get_token(LOGIN_PHONE)
     headers = base_headers
     r = requests.post(url=url, json=req_param, headers=headers)
     if r.status_code == 200:
-        shopcart_id = get_db_shopcart_id(sku_id)
+        shopcart_id = get_db_shopcart_id(SKU)
         return shopcart_id
     else:
         raise Exception(r.status_code)
@@ -104,13 +89,13 @@ def get_db_shopcart_id(sku_id):
 def get_sign_code(account, product):
     sha11 = get_sha1(account)
     url1 = 'http://192.168.2.200/sms/forget'
-    req_param = {"sign": sha11, "password": "123abc", "product": product}
-    r1 = requests.post(url=url1, json=req_param)
+    req_param = {"sign": sha11, "phone": account, "product": product}
+    requests.post(url=url1, json=req_param)
     sms = get_sms(account)
     sha12 = get_sha1(sms)
     url2 = 'http://192.168.2.200/sms/forget'
     req_param = {"sign": sha12, "verification_code": sms, "phone": account}
-    r2 = requests.put(url=url1, json=req_param)
+    r2 = requests.put(url=url2, json=req_param)
     c = r2.json()
     return c["sign_code"]
 
@@ -129,15 +114,13 @@ def del_sms(account, table='sms'):
 def del_app_user(account, table='users'):
     db = conn_db(table)
     sql1 = "delete from users.shop_user where phone = "
-    sql = sql1 + account
+    sql = sql1 + "'" + account + "'"
     db[1].execute(sql)
     db[0].commit()
     db[0].close()
-    if db[1].rowcount == 1:  # 判断是否删除成功，如果失败则回滚
-        logging.info("用户 %s 删除成功！" % account)
-    else:
+    if db[1].rowcount != 1:  # 判断是否删除成功，如果失败则回滚
         db[0].rollback()
-        logging.info("用户 %s 删除失败，回滚删除操作。" % account)
+        raise
 
 
 # 获取手机号加salt的散列值
@@ -157,10 +140,22 @@ def get_token(phone):
     return token
 
 
+# 获取带有token的headers
 def get_token_json(token):
     base_headers["Authorization"] = token
-    headers = base_headers
-    return headers
+    token_headers = base_headers
+    return token_headers
+
+
+# 获取最新下的一笔订单
+def get_order():
+    db = conn_db('shop')
+    sql = "select id from shop.member_order where user_id = '070b4130-b896-11e7-9271-000c2925c14e' order by created_at desc limit 1"
+    db[1].execute(sql)
+    results = db[1].fetchone()
+    results = results[0]
+    db[0].close()
+    return results
 
 # if __name__ == '__main__':
-#     get_shopcart_id()
+#     print(type(get_order()))
