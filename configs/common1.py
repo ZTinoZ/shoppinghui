@@ -8,6 +8,7 @@ REG_PHONE = '15000000000'  # 注册专用手机号
 LOGIN_PHONE = '15100000000'  # 登录专用手机号（已认证）
 LOGIN_PHONE_UNAUTH = '15200000000'  # 登录专用手机号（未认证）
 SKU = 'aabb7c86-bf9b-11e7-9271-000c2925c14e'  # 下单专用sku
+SKU2 = '7f5e2f93-ca7a-11e7-9271-000c2925c14e'  # 已下架sku
 
 
 base_headers = {
@@ -58,7 +59,7 @@ def get_shopcart_id():
         "company_id": "3d75251a-6df2-11e7-a420-000c2925c14e",
         "count": 1,
         "sale_price": 0.01,
-        "bonus": 0,
+        "bonus": 0.01,
         "points": 0,
         "warehouse_ids": ["8e09b82f-bf96-11e7-9271-000c2925c14e"]
     }
@@ -120,6 +121,7 @@ def del_app_user(account, table='users'):
     db[0].close()
     if db[1].rowcount != 1:  # 判断是否删除成功，如果失败则回滚
         db[0].rollback()
+    else:
         raise
 
 
@@ -147,10 +149,32 @@ def get_token_json(token):
     return token_headers
 
 
-# 获取最新下的一笔订单
-def get_order():
+# 获取最新一笔待支付订单
+def get_order0():
     db = conn_db('shop')
-    sql = "select id from shop.member_order where user_id = '070b4130-b896-11e7-9271-000c2925c14e' order by created_at desc limit 1"
+    sql = "select * from shop.member_order where user_id = '070b4130-b896-11e7-9271-000c2925c14e' and pay_status = 0 order by created_at desc limit 1;"
+    db[1].execute(sql)
+    results = db[1].fetchone()
+    results = results[0]
+    db[0].close()
+    return results
+
+
+# 获取最新一笔待支付（进行过支付）订单
+def get_order1():
+    db = conn_db('shop')
+    sql = "select * from shop.member_order where user_id = '070b4130-b896-11e7-9271-000c2925c14e' and pay_status = 1 order by created_at desc limit 1;"
+    db[1].execute(sql)
+    results = db[1].fetchone()
+    results = results[0]
+    db[0].close()
+    return results
+
+
+# 获取最新一笔待支付（进行过支付，部分已支付）订单
+def get_order2():
+    db = conn_db('shop')
+    sql = "select * from shop.member_order where user_id = '070b4130-b896-11e7-9271-000c2925c14e' and pay_status = 2 order by created_at desc limit 1;"
     db[1].execute(sql)
     results = db[1].fetchone()
     results = results[0]
