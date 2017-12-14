@@ -663,4 +663,5 @@ class TestShop:
                 continue
 
 if __name__ == '__main__':
+    raise
     nose.main()
