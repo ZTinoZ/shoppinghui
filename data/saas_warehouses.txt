@@ -1,0 +1,19 @@
+{
+  "number": "string",
+  "name": "string",
+  "province": "string",
+  "city": "string",
+  "area": "string",
+  "address_detail": "string",
+  "lng": 0,
+  "lat": 0,
+  "operator_id": "string",
+  "phone": "string",
+  "is_default": 0,
+  "delivery_type": 0,
+  "delivery_distance": 0,
+  "is_delivery": "是否交付仓，0不交付（不参与定位的仓），1交付，默认1",
+  "range_data": [
+    "\"110101\",\"110102\",\"110105\""
+  ]
+}

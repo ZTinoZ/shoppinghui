@@ -1,0 +1,16 @@
+{
+  "id": "",
+  "company_id": "",
+  "user_id": "",
+  "type": "3",
+  "province": "310000:上海市",
+  "city": "310100:市辖区",
+  "area": "310106:静安区",
+  "address_detail": "apitest地址测试详细地址",
+  "post": "",
+  "consignee_name": "apitest地址测试用户名",
+  "phone": "15100000000",
+  "lng": "",
+  "lat": "",
+  "is_default": ""
+}
