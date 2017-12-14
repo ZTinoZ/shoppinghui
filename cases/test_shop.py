@@ -29,7 +29,7 @@ class TestShop:
         requests.delete(url='http://192.168.2.200/shop/shopcart', headers=token_headers)  # 清空购物车
 
     # APP用户下单
-    @nottest
+
     def test01_app_place_order(self):
         for i in range(len(param2)):
 
@@ -125,7 +125,7 @@ class TestShop:
                 continue
 
     # APP用户订单列表
-    @nottest
+
     def test02_app_order_list(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP用户订单列表' and param2[i][9] == 'available':
@@ -143,7 +143,7 @@ class TestShop:
                 continue
 
     # APP用户订单详情
-    @nottest
+
     def test03_app_order_detail(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP用户订单详情' and param2[i][9] == 'available':
@@ -161,7 +161,7 @@ class TestShop:
                 continue
 
     # APP用户第三方支付
-    @nottest
+
     def test04_app_paycash(self):
         for i in range(len(param2)):
 
@@ -292,7 +292,7 @@ class TestShop:
                 continue
 
     # APP用户非第三方支付
-    @nottest
+
     def test05_app_pay(self):
         for i in range(len(param2)):
 
@@ -423,7 +423,7 @@ class TestShop:
                 continue
 
     # APP用户购物车列表
-    @nottest
+
     def test06_app_shopcart_list(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP用户购物车列表' and param2[i][9] == 'available':
@@ -446,7 +446,7 @@ class TestShop:
                 continue
 
     # APP用户购物车添加
-    @nottest
+
     def test07_app_shopcart_add(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP用户购物车添加' and param2[i][9] == 'available':
@@ -465,7 +465,7 @@ class TestShop:
                 continue
 
     # APP用户购物车修改
-    @nottest
+
     def test08_app_shopcart_add(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP用户购物车修改' and param2[i][9] == 'available':
@@ -486,7 +486,7 @@ class TestShop:
                 continue
 
     # APP用户购物车删除
-    @nottest
+
     def test09_app_shopcart_delete(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP用户购物车删除' and param2[i][9] == 'available':
@@ -504,7 +504,7 @@ class TestShop:
                 continue
 
     # APP用户购物车清空
-    @nottest
+
     def test10_app_shopcart_empty(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP用户购物车清空' and param2[i][9] == 'available':
@@ -522,7 +522,7 @@ class TestShop:
                 continue
 
     # APP商品列表
-    @nottest
+
     def test11_app_goods_list(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP商品列表' and param2[i][9] == 'available':
@@ -544,7 +544,7 @@ class TestShop:
                 continue
 
     # APP商品信息
-    @nottest
+
     def test12_app_goods_info(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP商品信息' and param2[i][9] == 'available':
@@ -562,7 +562,7 @@ class TestShop:
                 continue
 
     # APP查询运费
-    @nottest
+
     def test13_app_querycost(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP查询运费' and param2[i][9] == 'available':
@@ -581,7 +581,7 @@ class TestShop:
                 continue
 
     # APP获取版本号
-    @nottest
+
     def test14_app_version(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP获取版本号' and param2[i][9] == 'available':
@@ -597,7 +597,7 @@ class TestShop:
                 continue
 
     # APP获取服务内容列表
-    @nottest
+
     def test15_app_term_list(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP获取服务内容列表' and param2[i][9] == 'available':
@@ -613,7 +613,7 @@ class TestShop:
                 continue
 
     # APP获取服务内容详细信息
-    @nottest
+
     def test16_app_term(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP获取服务内容详细信息' and param2[i][9] == 'available':
@@ -628,7 +628,7 @@ class TestShop:
                 continue
 
     # APP广告列表
-    @nottest
+
     def test17_app_ad_list(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP广告列表' and param2[i][9] == 'available':
@@ -646,7 +646,7 @@ class TestShop:
                 continue
 
     # APP广告展示
-    @nottest
+
     def test18_app_ad(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP广告展示' and param2[i][9] == 'available':
@@ -663,5 +663,4 @@ class TestShop:
                 continue
 
 if __name__ == '__main__':
-    raise
     nose.main()
