@@ -31,51 +31,51 @@ class User:
             raise
 
     # APP用户注册（无token）
-    def test_1_app_register(self):
+    def test01_app_register(self):
         sms = get_sms(REG_PHONE)
         for i in range(len(param2)):
-            if param2[i][1] == u'APP用户注册' and param2[i][8] == 'available':
-                json_param = json.JSONDecoder().decode(param2[i][4])
+            if param2[i][1] == u'APP用户注册' and param2[i][9] == 'available':
+                json_param = json.JSONDecoder().decode(param2[i][5])
                 json_param['verification_code'] = sms
-                r = requests.post(url=param2[i][3], json=json_param, headers=base_headers)
-                if r.status_code != param2[i][5]:
+                r = requests.request(method=param2[i][4], url=param2[i][3], json=json_param, headers=base_headers)
+                if r.status_code != param2[i][6]:
                     j = r.json()
                     code_msg = (param2[i][2] + j['message']).encode('utf-8')
-                    assert_equal(param2[i][5], r.status_code, code_msg)
+                    assert_equal(param2[i][6], r.status_code, code_msg)
                 else:
-                    assert_equal(param2[i][5], r.status_code, r.status_code)
+                    logging.info(u'\n%s测试通过！' % param2[i][2])
             else:
                 continue
 
     # APP用户登录（无token）
-    def test_2_app_login(self):
+    def test02_app_login(self):
         for i in range(len(param2)):
-            if param2[i][1] == u'APP用户登录' and param2[i][8] == 'available':
-                json_param = json.JSONDecoder().decode(param2[i][4])
-                r = requests.post(url=param2[i][3], json=json_param, headers=base_headers)
-                if r.status_code != param2[i][5]:
+            if param2[i][1] == u'APP用户登录' and param2[i][9] == 'available':
+                json_param = json.JSONDecoder().decode(param2[i][5])
+                r = requests.request(method=param2[i][4], url=param2[i][3], json=json_param, headers=base_headers)
+                if r.status_code != param2[i][6]:
                     j = r.json()
                     code_msg = (param2[i][2] + j['message']).encode('utf-8')
-                    assert_equal(param2[i][5], r.status_code, code_msg)
+                    assert_equal(param2[i][6], r.status_code, code_msg)
                 else:
-                    assert_equal(param2[i][5], r.status_code, r.status_code)
+                    logging.info(u'\n%s测试通过！' % param2[i][2])
             else:
                 continue
 
     # APP用户修改用户信息
-    def test_3_app_mod_info(self):
+    def test03_app_mod_info(self):
         for i in range(len(param2)):
-            if param2[i][1] == u'APP用户修改用户信息' and param2[i][8] == 'available':
-                if param2[i][7] == 'need_token':
-                    r = requests.put(url=param2[i][3], headers=token_headers)
+            if param2[i][1] == u'APP用户修改用户信息' and param2[i][9] == 'available':
+                if param2[i][8] == 'need_token':
+                    r = requests.request(method=param2[i][4], url=param2[i][3], headers=token_headers)
                 else:
-                    r = requests.put(url=param2[i][3])
-                if r.status_code != param2[i][5]:
+                    r = requests.request(method=param2[i][4], url=param2[i][3])
+                if r.status_code != param2[i][6]:
                     j = r.json()
                     code_msg = (param2[i][2] + j['message']).encode('utf-8')
-                    assert_equal(param2[i][5], r.status_code, code_msg)
+                    assert_equal(param2[i][6], r.status_code, code_msg)
                 else:
-                    assert_equal(param2[i][5], r.status_code, r.status_code)
+                    logging.info(u'\n%s测试通过！' % param2[i][2])
             else:
                 continue
 

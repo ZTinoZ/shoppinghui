@@ -2,6 +2,7 @@
 
 import json, MySQLdb, requests, hashlib, logging
 from configs.config import *
+from nose.tools import nottest, istest, assert_equal
 
 
 REG_PHONE = '15000000000'  # 注册专用手机号
@@ -9,6 +10,8 @@ LOGIN_PHONE = '15100000000'  # 登录专用手机号（已认证）
 LOGIN_PHONE_UNAUTH = '15200000000'  # 登录专用手机号（未认证）
 SKU = 'aabb7c86-bf9b-11e7-9271-000c2925c14e'  # 下单专用sku
 SKU2 = '7f5e2f93-ca7a-11e7-9271-000c2925c14e'  # 已下架sku
+WAREHOUSE = '8e09b82f-bf96-11e7-9271-000c2925c14e'  # 下单专用sku所属仓库
+WAREHOUSE2 = 'be784eab-c9f8-11e7-9271-000c2925c14e'  # 不在配送范围内的仓库
 
 
 base_headers = {

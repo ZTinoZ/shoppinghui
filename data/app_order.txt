@@ -6,6 +6,7 @@
   "total_amount": "1.01",
   "order_amount": "0.01",
   "count": "1",
+  "free_shipping_price": 0,
   "platform_type": "9e304d4e8df1b74cfa009913198428ab",
   "shopcart": [
     {
