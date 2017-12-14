@@ -440,7 +440,7 @@ class TestShop:
                     code_msg = (param2[i][2] + j['message']).encode('utf-8')
                     assert_equal(param2[i][7], j["count"], code_msg)
                 else:
-                    logging.info('\n%s测试通过！' % param2[i][2])
+                    logging.info(u'\n%s测试通过！' % param2[i][2])
                     requests.delete(url='http://192.168.2.200/shop/shopcart', headers=token_headers)  # 删除购物车（调用接口）
             else:
                 continue
