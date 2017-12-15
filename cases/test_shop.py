@@ -1,6 +1,6 @@
 # encoding:utf-8
 
-import requests, json, nose, logging, sys
+import requests, json, nose, logging, sys, time, datetime
 sys.path.append('..')
 from data.read_cases import *
 from configs.common1 import *
@@ -88,9 +88,7 @@ class TestShop:
                 for p in range(10):  # 十个参数，循环十次，每次赋给相应的参数空值，来模拟必填参数为空的情况
                     json_param = list(read_param(param2[i][5]))
                     json_param[p] = ""
-                    print(json_param)
                     r = requests.request(method=param2[i][4], url=param2[i][3], json=json_param, headers=token_headers)
-                    print(r.status_code)
                     if r.status_code != param2[i][6]:
                         j = r.json()
                         code_msg = (param2[i][2] + j['message']).encode('utf-8')
@@ -263,6 +261,7 @@ class TestShop:
                     assert_equal(param2[i][6], r.status_code, code_msg)
                 else:
                     logging.info(u'\n%s测试通过！' % param2[i][2])
+                    time.sleep(2)  # 避免请求过于频繁，等待2秒
 
             # 支付状态不匹配用例
             elif param2[i][2] == u'APP用户第三方支付_订单状态不匹配: ' and param2[i][9] == 'available':
@@ -394,6 +393,7 @@ class TestShop:
                     assert_equal(param2[i][6], r.status_code, code_msg)
                 else:
                     logging.info(u'\n%s测试通过！' % param2[i][2])
+                    time.sleep(2)  # 避免请求过于频繁，等待2秒
 
             # 支付状态不匹配用例
             elif param2[i][2] == u'APP用户非第三方支付_订单状态不匹配: ' and param2[i][9] == 'available':
@@ -477,7 +477,6 @@ class TestShop:
                     r = requests.request(method=param2[i][4], url=url, json=json_param)
                 if r.status_code != param2[i][6]:
                     j = r.json()
-                    print(url)
                     code_msg = (param2[i][2] + j['message']).encode('utf-8')
                     assert_equal(param2[i][6], r.status_code, code_msg)
                 else:
@@ -572,7 +571,6 @@ class TestShop:
                     code_msg = (param2[i][2] + j['message']).encode('utf-8')
                     assert_equal(param2[i][6], r.status_code, code_msg)
                 elif j["express_cost"] != param2[i][7]:
-                    print(j["express_cost"], param2[i][7])
                     code_msg = (param2[i][2] + j['message']).encode('utf-8')
                     assert_equal(param2[i][7], j["count"], code_msg)
                 else:
