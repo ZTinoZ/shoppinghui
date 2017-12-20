@@ -1,13 +1,13 @@
 # encoding:utf-8
 
-import requests, json, nose, logging, sys
+import requests, json, nose, logging, sys, time
 sys.path.append('..')
 from data.read_cases import *
 from configs.common1 import *
 from nose.tools import nottest, istest, assert_equal
 
 
-class User:
+class TestUser:
 
     @classmethod
     def setup_class(cls):
@@ -25,12 +25,13 @@ class User:
     @classmethod
     def teardown_class(cls):
         try:
-            del_app_user(REG_PHONE)
+            # del_app_user(REG_PHONE)
             del_sms(REG_PHONE)
         except:
             raise
 
-    # APP用户注册（无token）
+    # APP用户注册
+    @nottest
     def test01_app_register(self):
         sms = get_sms(REG_PHONE)
         for i in range(len(param2)):
@@ -47,7 +48,8 @@ class User:
             else:
                 continue
 
-    # APP用户登录（无token）
+    # APP用户登录
+    @nottest
     def test02_app_login(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP用户登录' and param2[i][9] == 'available':
@@ -63,6 +65,7 @@ class User:
                 continue
 
     # APP用户修改用户信息
+    @nottest
     def test03_app_mod_info(self):
         for i in range(len(param2)):
             if param2[i][1] == u'APP用户修改用户信息' and param2[i][9] == 'available':
@@ -81,6 +84,22 @@ class User:
 
     # APP用户修改密码
 
+    def test04_app_mod_pw(self):
+        for i in range(len(param2)):
+            if param2[i][1] == u'APP用户修改密码' and param2[i][9] == 'available':
+                sign_code = get_sign_code("15100000000", "app")
+                json_param = json.JSONDecoder().decode(param2[i][5])
+                json_param["sign_code"] = sign_code
+                r = requests.request(method=param2[i][4], url=param2[i][3], json=json_param)
+                if r.status_code != param2[i][6]:
+                    j = r.json()
+                    code_msg = (param2[i][2] + j['message']).encode('utf-8')
+                    assert_equal(param2[i][6], r.status_code, code_msg)
+                else:
+                    logging.info(u'\n%s测试通过！' % param2[i][2])
+                    time.sleep(1)
+            else:
+                continue
 
 if __name__ == '__main__':
     nose.main()

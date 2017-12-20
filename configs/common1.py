@@ -25,7 +25,7 @@ base_headers = {
 }
 
 
-# 生成并获取验证码
+# 生成验证码
 def get_sms(reg_phone):
     sign = get_sha1(reg_phone)
     json_param = {"sign": sign, "phone": reg_phone}
@@ -95,8 +95,8 @@ def get_sign_code(account, product):
     url1 = 'http://192.168.2.200/sms/forget'
     req_param = {"sign": sha11, "phone": account, "product": product}
     requests.post(url=url1, json=req_param)
-    sms = get_sms(account)
-    sha12 = get_sha1(sms)
+    sms = get_db_sms(account)
+    sha12 = get_sha2(sms, account)
     url2 = 'http://192.168.2.200/sms/forget'
     req_param = {"sign": sha12, "verification_code": sms, "phone": account}
     r2 = requests.put(url=url2, json=req_param)
@@ -128,9 +128,16 @@ def del_app_user(account, table='users'):
         raise
 
 
-# 获取手机号加salt的散列值
-def get_sha1(value):
-    data = 'phone=' + value + '&' + 'salt=123456'
+# 获取手机号+salt的散列值
+def get_sha1(phone):
+    data = 'phone=' + phone + '&' + 'salt=123456'
+    sha1 = hashlib.sha1(data)
+    return sha1.hexdigest()
+
+
+# 获取验证码+手机号+salt的散列值
+def get_sha2(sms, phone):
+    data = 'verification_code=' + str(sms) + '&' + 'phone=' + phone + '&' + 'salt=123456'
     sha1 = hashlib.sha1(data)
     return sha1.hexdigest()
 
@@ -185,4 +192,5 @@ def get_order2():
     return results
 
 # if __name__ == '__main__':
-#     print(type(get_order()))
+#     a = get_sign_code("15100000000", "app")
+#     print(a)
